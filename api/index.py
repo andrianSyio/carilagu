@@ -1,4 +1,6 @@
+# api/index.py
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # <-- 1. TAMBAHKAN IMPORT INI
 import requests
 import base64
 import hmac
@@ -6,17 +8,18 @@ import hashlib
 import time
 from pydub import AudioSegment
 from io import BytesIO
-import os # Import os untuk mengambil environment variables
+import os
 
-# Inisialisasi aplikasi Flask
 app = Flask(__name__)
+CORS(app)  # <-- 2. TAMBAHKAN BARIS INI UNTUK MENGIZINKAN SEMUA PERMINTAAN
 
 # Ambil kunci API dari Environment Variables Vercel
 access_key = os.environ.get('ACR_ACCESS_KEY')
 access_secret = os.environ.get('ACR_ACCESS_SECRET')
 requrl = "http://identify-ap-southeast-1.acrcloud.com/v1/identify"
 
-# ... (Fungsi find_song_on_deezer SAMA PERSIS seperti sebelumnya)
+# ... (SISA KODE DI BAWAH INI SAMA PERSIS SEPERTI SEBELUMNYA, TIDAK PERLU DIUBAH)
+
 def find_song_on_deezer(title, artist):
     search_url = "https://api.deezer.com/search"
     params = {"q": f'artist:"{artist}" track:"{title}"'}
@@ -32,7 +35,6 @@ def find_song_on_deezer(title, artist):
 
 @app.route('/', methods=['POST'])
 def identify_song():
-    # Cek apakah kunci API sudah di-set
     if not access_key or not access_secret:
         return jsonify({'success': False, 'message': 'Konfigurasi API di server belum lengkap.'}), 500
 
@@ -41,7 +43,6 @@ def identify_song():
 
     uploaded_file = request.files['file']
     
-    # ... (Logika ekstraksi audio dari video SAMA PERSIS seperti sebelumnya)
     if uploaded_file.content_type.startswith('video/'):
         try:
             video = AudioSegment.from_file(uploaded_file)
@@ -53,7 +54,6 @@ def identify_song():
     else:
         audio_sample = uploaded_file.read()
 
-    # ... (Logika request ke ACRCloud dan Deezer SAMA PERSIS seperti sebelumnya)
     sample_bytes = len(audio_sample)
     http_method = "POST"
     http_uri = "/v1/identify"
@@ -88,5 +88,3 @@ def identify_song():
         })
     else:
         return jsonify({'success': False, 'message': 'Lagu tidak dapat diidentifikasi.'}), 404
-
-# PERHATIKAN: Bagian app.run() DIHAPUS. Vercel yang akan menjalankan ini.

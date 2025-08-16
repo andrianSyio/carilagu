@@ -12,8 +12,8 @@ import os # Import os untuk mengambil environment variables
 app = Flask(__name__)
 
 # Ambil kunci API dari Environment Variables Vercel
-access_key = os.environ.get('f2e5d261cde9b39d6f5f461856251826')
-access_secret = os.environ.get('F8XRQiX4qUilIGWUU3vAiWPeZjLS2HqkmxPwzVbw')
+access_key = os.environ.get('ACR_ACCESS_KEY')
+access_secret = os.environ.get('ACR_ACCESS_SECRET')
 requrl = "http://identify-ap-southeast-1.acrcloud.com/v1/identify"
 
 # ... (Fungsi find_song_on_deezer SAMA PERSIS seperti sebelumnya)

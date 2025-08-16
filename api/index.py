@@ -9,23 +9,25 @@ from pydub import AudioSegment
 from io import BytesIO
 import os
 
-import ffmpeg_static # <-- 1. TAMBAHKAN IMPORT INI
+# Mengimpor library ffmpeg-static untuk mendapatkan path-nya
+import ffmpeg_static
 
 # Inisialisasi aplikasi Flask
 app = Flask(__name__)
 CORS(app)
 
-# Memberitahu pydub di mana harus menemukan ffmpeg.exe dari paket ffmpeg-static
-AudioSegment.converter = ffmpeg_static.get_ffmpeg_path() # <-- 2. TAMBAHKAN BARIS INI
+# Baris ini SANGAT PENTING untuk memberitahu pydub di mana lokasi ffmpeg
+# yang sudah dibundel oleh paket ffmpeg-static.
+AudioSegment.converter = ffmpeg_static.get_ffmpeg_path()
 
-# Ambil kunci API dari Environment Variables Vercel
+# Ambil kunci API dari Environment Variables di Vercel
 access_key = os.environ.get('ACR_ACCESS_KEY')
 access_secret = os.environ.get('ACR_ACCESS_SECRET')
 requrl = "http://identify-ap-southeast-1.acrcloud.com/v1/identify"
 
-# ... (SISA KODE DI BAWAH INI SAMA PERSIS SEPERTI SEBELUMNYA, TIDAK PERLU DIUBAH)
 
 def find_song_on_deezer(title, artist):
+    """Mencari lagu di Deezer untuk mendapatkan sampul album dan URL preview."""
     search_url = "https://api.deezer.com/search"
     params = {"q": f'artist:"{artist}" track:"{title}"'}
     try:
@@ -40,6 +42,7 @@ def find_song_on_deezer(title, artist):
 
 @app.route('/', methods=['POST'])
 def identify_song():
+    """Endpoint utama untuk menerima file dan mengidentifikasi lagu."""
     if not access_key or not access_secret:
         return jsonify({'success': False, 'message': 'Konfigurasi API di server belum lengkap.'}), 500
 
@@ -48,6 +51,7 @@ def identify_song():
 
     uploaded_file = request.files['file']
     
+    # Ekstrak audio jika file yang diunggah adalah video
     if uploaded_file.content_type.startswith('video/'):
         try:
             video = AudioSegment.from_file(uploaded_file)
@@ -59,6 +63,7 @@ def identify_song():
     else:
         audio_sample = uploaded_file.read()
 
+    # Siapkan dan kirim request ke ACRCloud
     sample_bytes = len(audio_sample)
     http_method = "POST"
     http_uri = "/v1/identify"
@@ -69,11 +74,14 @@ def identify_song():
     sign = base64.b64encode(
         hmac.new(access_secret.encode('ascii'), string_to_sign.encode('ascii'), digestmod=hashlib.sha1).digest()
     ).decode('ascii')
+    
     files = {'sample': audio_sample}
     data = {'access_key': access_key, 'sample_bytes': sample_bytes, 'timestamp': timestamp, 'signature': sign, 'data_type': data_type, "signature_version": signature_version}
+    
     response_acr = requests.post(requrl, files=files, data=data)
     result_acr = response_acr.json()
 
+    # Proses respons dari ACRCloud dan cari detail tambahan di Deezer
     status = result_acr.get('status', {})
     if status.get('msg') == 'Success':
         music_info = result_acr.get('metadata', {}).get('music', [{}])[0]
@@ -81,6 +89,7 @@ def identify_song():
         artists_list = [artist['name'] for artist in music_info.get('artists', [])]
         artists = ', '.join(artists_list) if artists_list else 'Tidak Diketahui'
         album = music_info.get('album', {}).get('name', 'Tidak Diketahui')
+        
         deezer_info = find_song_on_deezer(title, artists_list[0] if artists_list else '')
         
         return jsonify({

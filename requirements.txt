@@ -2,3 +2,4 @@ Flask
 requests
 pydub
 Flask-Cors
+ffmpeg-static

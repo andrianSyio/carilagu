@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Dokumentasi - Sonus</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        :root {
+            --primary-color: #3B82F6; --bg-color: #F9FAFB; --text-color: #1F2937; --text-muted: #6B7280; --border-color: #E5E7EB; --code-bg: #1F2937; --code-text: #D1D5DB;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.7; margin: 0; padding: 0; }
+        .container { display: flex; max-width: 1200px; margin: 0 auto; }
+        .sidebar { width: 250px; padding: 2.5rem; border-right: 1px solid var(--border-color); position: sticky; top: 0; height: 100vh; overflow-y: auto; background-color: #FFFFFF; }
+        .sidebar .logo { margin-bottom: 2rem; }
+        .sidebar .logo a { text-decoration: none; }
+        .sidebar .logo img { max-width: 120px; } /* Logo disesuaikan ukurannya */
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li a { text-decoration: none; color: var(--text-muted); padding: 0.6rem 0; display: block; transition: color 0.2s ease; font-size: 0.9rem; }
+        .sidebar li a:hover, .sidebar li a.active { color: var(--primary-color); font-weight: 500; }
+        .content { flex-grow: 1; padding: 2.5rem 4rem; max-width: calc(100% - 250px - 450px); }
+        .content-code { width: 450px; background-color: var(--code-bg); color: var(--code-text); position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+        h1, h2, h3 { margin-top: 0; color: var(--text-dark); }
+        h1 { margin-bottom: 0.5rem; }
+        .intro-p { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1.125rem; }
+        section { padding-top: 2.5rem; margin-bottom: 2rem; border-top: 1px solid var(--border-color); }
+        .endpoint { background-color: #F3F4F6; border-radius: 8px; padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        .method { background-color: var(--primary-color); color: white; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.8rem; letter-spacing: 0.5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+        th, td { text-align: left; padding: 0.8rem; border-bottom: 1px solid var(--border-color); }
+        th { font-weight: 600; font-size: 0.9rem; }
+        td { color: var(--text-muted); }
+        code { font-family: 'JetBrains Mono', monospace; background-color: #F3F4F6; color: #4B5563; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.9rem; }
+        .code-header { display: flex; background-color: #374151; padding: 0.5rem 1rem; border-bottom: 1px solid #4B5563; }
+        .lang-tabs button { background: none; border: none; color: #9CA3AF; padding: 0.5rem 1rem; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.9rem; transition: all 0.2s ease; }
+        .lang-tabs button.active { color: white; border-bottom: 2px solid var(--primary-color); }
+        .code-body { position: relative; }
+        .code-body pre { margin: 0; padding: 1.5rem; overflow-x: auto; font-size: 0.85rem; }
+        .code-body pre code { background: none; padding: 0; color: var(--code-text); }
+        .copy-btn { position: absolute; top: 1rem; right: 1rem; background-color: #4B5563; color: white; border: none; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; opacity: 0.7; transition: all 0.2s ease; }
+        @media (max-width: 1024px) { .container { flex-direction: column; } .sidebar, .content-code { position: static; width: 100%; height: auto; border-right: none; } .content { max-width: 100%; padding: 2rem 1.5rem; } .content-code { height: auto; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="img/logo.png" alt="Sonus API Logo">
+                </a>
+            </div>
+            <ul>
+                <li><a href="#introduction" class="active">Pendahuluan</a></li>
+                <li><a href="#endpoint">Endpoint</a></li>
+                <li><a href="#request">Request Body</a></li>
+                <li><a href="#response">Response</a></li>
+                <li><a href="#examples">Contoh Kode</a></li>
+            </ul>
+        </aside>
+        
+        <main class="content"> <h1 id="introduction">Dokumentasi API Sonus</h1> <p class="intro-p">Gunakan Sonus API untuk mengidentifikasi lagu dari potongan audio atau video secara terprogram.</p> <section id="endpoint"> <h2>Endpoint Utama</h2> <p>Semua permintaan untuk identifikasi lagu dikirim ke endpoint tunggal ini.</p> <div class="endpoint"> <span class="method">POST</span> <span>https://lagu-neon.vercel.app/</span> </div> </section> <section id="request"> <h2>Request Body</h2> <p>Request harus dikirim sebagai <code>multipart/form-data</code>.</p> <table> <thead> <tr> <th>Key</th> <th>Tipe</th> <th>Deskripsi</th> </tr> </thead> <tbody> <tr> <td><code>file</code></td> <td>File</td> <td><strong>Wajib.</strong> File media (MP3, WAV, MP4, dll.) yang akan diidentifikasi.</td> </tr> </tbody> </table> </section> <section id="response"> <h2>Response</h2> <p>API akan selalu mengembalikan objek JSON.</p> <h3>Respons Sukses (200 OK)</h3> <p>Jika lagu berhasil dikenali.</p> <div class="content-code" style="position: static; height: auto; width: 100%; margin: 1rem 0;"> <div class="code-body"> <pre><code>{
+  "success": true,
+  "title": "Numb",
+  "artist": "Linkin Park",
+  "album": "Meteora",
+  "cover_art": "https://url.to/cover.jpg",
+  "preview_url": "https://url.to/preview.mp3"
+}</code></pre> </div> </div> <h3>Respons Gagal (4xx/5xx)</h3> <p>Jika terjadi kesalahan.</p> <div class="content-code" style="position: static; height: auto; width: 100%; margin: 1rem 0;"> <div class="code-body"> <pre><code>{
+  "success": false,
+  "message": "Lagu tidak dapat diidentifikasi."
+}</code></pre> </div> </div> </section> </main>
+        <aside id="examples" class="content-code"> <div class="code-header"> <div class="lang-tabs"> <button class="active" data-lang="curl">cURL</button> <button data-lang="python">Python</button> <button data-lang="js">JavaScript</button> <button data-lang="php">PHP</button> </div> </div> <div class="code-body" data-lang="curl"> <button class="copy-btn">Copy</button> <pre><code>curl -X POST \
+  https://lagu-neon.vercel.app/ \
+  -F "file=@/path/to/your/song.mp4"</code></pre> </div> <div class="code-body hidden" data-lang="python"> <button class="copy-btn">Copy</button> <pre><code>import requests
+
+api_url = "https://lagu-neon.vercel.app/"
+file_path = "path/to/your/song.mp4"
+
+with open(file_path, 'rb') as f:
+    files = {'file': f}
+    try:
+        response = requests.post(api_url, files=files)
+        response.raise_for_status()
+        print("Berhasil!")
+        print(response.json())
+    except requests.exceptions.RequestException as e:
+        print(f"Gagal: {e}")
+        print(response.text)</code></pre> </div> <div class="code-body hidden" data-lang="js"> <button class="copy-btn">Copy</button> <pre><code>// Menggunakan Node.js dengan node-fetch
+// npm install node-fetch@2 form-data
+
+const fetch = require('node-fetch');
+const FormData = require('form-data');
+const fs = require('fs');
+
+const apiUrl = "https://lagu-neon.vercel.app/";
+const filePath = "path/to/your/song.mp4";
+
+const form = new FormData();
+form.append('file', fs.createReadStream(filePath));
+
+fetch(apiUrl, { method: 'POST', body: form })
+    .then(res => res.json())
+    .then(data => console.log("Berhasil!", data))
+    .catch(err => console.error("Gagal:", err));</code></pre> </div> <div class="code-body hidden" data-lang="php"> <button class="copy-btn">Copy</button> <pre><code>&lt;?php
+
+$apiUrl = 'https://lagu-neon.vercel.app/';
+$filePath = 'path/to/your/song.mp4';
+
+$fileData = new CURLFile($filePath);
+$postData = ['file' => $fileData];
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $apiUrl);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+
+if ($httpCode == 200) {
+    echo "Berhasil!\n";
+    print_r(json_decode($response, true));
+} else {
+    echo "Gagal dengan status code: {$httpCode}\n";
+    echo $response;
+}
+?&gt;</code></pre> </div> </aside>
+    </div>
+    <script>
+        const langTabs=document.querySelector(".lang-tabs"),codeBodies=document.querySelectorAll(".content-code .code-body"),copyButtons=document.querySelectorAll(".copy-btn"),sidebarLinks=document.querySelectorAll(".sidebar a");langTabs.addEventListener("click",e=>{if("BUTTON"===e.target.tagName){const t=e.target.dataset.lang;langTabs.querySelector(".active").classList.remove("active"),e.target.classList.add("active"),codeBodies.forEach(e=>{e.classList.toggle("hidden",e.dataset.lang!==t)})}}),copyButtons.forEach(e=>{e.addEventListener("click",()=>{const t=e.nextElementSibling.querySelector("code").innerText;navigator.clipboard.writeText(t).then(()=>{e.innerText="Copied!",setTimeout(()=>{e.innerText="Copy"},2e3)})})});const sections=document.querySelectorAll("main section");window.addEventListener("scroll",()=>{let e="";sections.forEach(t=>{const o=t.offsetTop;pageYOffset>=o-60&&(e=t.getAttribute("id"))}),sidebarLinks.forEach(t=>{t.classList.remove("active"),t.getAttribute("href")===`#${e}`&&t.classList.add("active")})});
+    </script>
+</body>
+</html>

@@ -15,10 +15,5 @@
       "dest": "api/index.py"
     }
   ],
-  "functions": {
-    "api/index.py": {
-      "memory": 1024
-    }
-  },
   "installCommand": "bash build_files.sh && pip install -r requirements.txt"
 }

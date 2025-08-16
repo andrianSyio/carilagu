@@ -1,6 +1,5 @@
-# api/index.py
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # <-- 1. TAMBAHKAN IMPORT INI
+from flask_cors import CORS
 import requests
 import base64
 import hmac
@@ -10,8 +9,14 @@ from pydub import AudioSegment
 from io import BytesIO
 import os
 
+import ffmpeg_static # <-- 1. TAMBAHKAN IMPORT INI
+
+# Inisialisasi aplikasi Flask
 app = Flask(__name__)
-CORS(app)  # <-- 2. TAMBAHKAN BARIS INI UNTUK MENGIZINKAN SEMUA PERMINTAAN
+CORS(app)
+
+# Memberitahu pydub di mana harus menemukan ffmpeg.exe dari paket ffmpeg-static
+AudioSegment.converter = ffmpeg_static.get_ffmpeg_path() # <-- 2. TAMBAHKAN BARIS INI
 
 # Ambil kunci API dari Environment Variables Vercel
 access_key = os.environ.get('ACR_ACCESS_KEY')

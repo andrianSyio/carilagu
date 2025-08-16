@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonus - Temukan Musik dalam Sekejap</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        :root {
+            --primary-color: #3B82F6;
+            --primary-light: #EFF6FF;
+            --bg-color: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --border-color: #E5E7EB;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        /* Hero Section Selayar Penuh */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100vh; /* Tinggi selayar penuh */
+            width: 100%;
+            background-color: var(--primary-light);
+            position: relative;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+        .hero .logo {
+            width: 100%;
+            max-width: 200px; /* Logo diperbesar lagi */
+            height: auto;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0 0 1rem 0;
+            letter-spacing: -1.5px;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .docs-button {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .docs-button:hover {
+            background-color: var(--card-bg);
+            color: var(--text-dark);
+        }
+
+        /* Animasi Mouse Gulir */
+        .scroll-down-animation {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .mouse {
+            width: 28px;
+            height: 48px;
+            border: 2px solid var(--text-light);
+            border-radius: 14px;
+            position: relative;
+        }
+        .scroller {
+            width: 4px;
+            height: 8px;
+            background-color: var(--text-light);
+            border-radius: 2px;
+            position: absolute;
+            left: 50%;
+            top: 8px;
+            transform: translateX(-50%);
+            animation: scroll 2s infinite;
+        }
+        @keyframes scroll {
+            0% { opacity: 1; top: 8px; }
+            50% { opacity: 0; top: 20px; }
+            100% { opacity: 1; top: 8px; }
+        }
+
+        /* Main Content (Setelah di-scroll) */
+        .main-content {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        .app-column {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .container {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            width: 100%;
+            border: 1px solid var(--border-color);
+        }
+        .info-column h2 { font-size: 1.75rem; font-weight: 600; margin-bottom: 2rem; color: var(--text-dark); }
+        .feature-list { list-style: none; padding: 0; }
+        .feature-item { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+        .feature-item .icon { color: var(--primary-color); flex-shrink: 0; margin-top: 4px; }
+        .feature-item h3 { margin: 0 0 0.25rem 0; font-size: 1.1rem; }
+        .feature-item p { margin: 0; color: var(--text-light); font-size: 0.95rem; }
+        
+        /* ... [CSS untuk uploader, progress, hasil, dll. sama] ... */
+        .view { animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .hidden { display: none !important; } .upload-area { border: 2px dashed var(--border-color); border-radius: 16px; padding: 2.5rem; cursor: pointer; transition: all 0.3s ease; } .upload-area.drag-over { border-color: var(--primary-color); background-color: var(--primary-light); } .upload-area p { margin: 0; color: var(--text-light); } .upload-area p span { color: var(--primary-color); font-weight: 600; } .progress-view p { margin-top: 0; margin-bottom: 0.5rem; color: var(--text-light); font-size: 0.9rem; } .progress-container { width: 100%; height: 8px; background-color: #E5E7EB; border-radius: 99px; overflow: hidden; margin-bottom: 0.5rem; } .progress-bar { width: 0%; height: 100%; background-color: var(--primary-color); border-radius: 99px; transition: width 0.3s ease; } .progress-text { font-weight: 600; color: var(--primary-color); } .loader { width: 48px; height: 48px; border: 4px solid #E5E7EB; border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto 1rem auto; } @keyframes spin { to { transform: rotate(360deg); } } .album-cover { width: 100%; max-width: 280px; aspect-ratio: 1/1; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 1.5rem; object-fit: cover; } .song-info h2 { font-size: 1.75rem; font-weight: 600; margin: 0; color: var(--text-dark); } .song-info p { font-size: 1.125rem; color: var(--text-light); margin: 0.25rem 0 1.5rem 0; } audio { width: 100%; margin-top: 1rem; } .search-again-btn { background-color: var(--primary-color); color: white; border: none; padding: 14px 28px; margin-top: 1.5rem; border-radius: 99px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.2s ease; } #error { margin-top: 1.5rem; font-weight: 500; color: #EF4444; }
+
+        .site-footer { text-align: center; padding: 3rem 2rem; background-color: var(--card-bg); border-top: 1px solid var(--border-color); color: var(--text-light); font-size: 0.9rem; }
+
+        @media (max-width: 992px) { .main-content { grid-template-columns: 1fr; } .info-column { text-align: center; } .feature-list { max-width: 450px; margin: 0 auto; } .feature-item { text-align: left; } }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.25rem; } .hero p { font-size: 1rem; } .main-content { margin: 2rem auto; padding: 0 1rem; gap: 3rem; } .container { padding: 1.5rem; } .docs-button { top: 1rem; right: 1rem; } }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <a href="docs.html" class="docs-button">API Docs</a>
+        <img src="img/logo.png" alt="Sonus Logo" class="logo">
+        <h1>Sonus</h1>
+        <p>Kenali musik dari audio atau video apapun.</p>
+        <a href="#app" class="scroll-down-animation">
+            <div class="mouse"><div class="scroller"></div></div>
+        </a>
+    </header>
+
+    <main class="main-content" id="app">
+        <section class="app-column">
+            <div class="container">
+                <div id="initialView" class="view">
+                    <div id="uploadArea" class="upload-area">
+                        <p>Tarik & Lepas file di sini atau <span>pilih file</span></p>
+                    </div>
+                </div>
+                <div id="uploadProgressView" class="view hidden"> <p id="uploadFileName"></p> <div class="progress-container"> <div id="uploadProgressBar" class="progress-bar"></div> </div> <span id="uploadProgressText" class="progress-text">0%</span> </div>
+                <div id="searchView" class="view hidden"> <div class="loader"></div> <p>Mencari judul lagu...</p> </div>
+                <div id="resultView" class="view hidden"> <img id="albumCover" src="" alt="Album Cover" class="album-cover"> <div class="song-info"> <h2 id="title"></h2> <p id="artist"></p> </div> <audio id="audioPlayer" controls></audio> <div id="previewError" class="hidden" style="margin: 1.5rem 0;">Preview tidak tersedia.</div> <button id="searchAgainBtn" class="search-again-btn">Cari Lagi</button> </div>
+                <div id="error" class="view hidden"></div>
+                <input type="file" id="audioFileInput" accept="audio/*,video/mp4" class="hidden">
+            </div>
+        </section>
+
+        <section class="info-column">
+            <h2>Kekuatan di Ujung Jari Anda</h2>
+            <p class="lead">Sonus dirancang untuk memberikan kemudahan dan kecepatan dalam mengenali musik favorit Anda.</p>
+            <ul class="feature-list">
+                <li class="feature-item">
+                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
+                    <div>
+                        <h3>Sangat Cepat</h3>
+                        <p>Proses identifikasi hanya butuh beberapa detik berkat teknologi audio fingerprinting yang canggih.</p>
+                    </div>
+                </li>
+                <li class="feature-item">
+                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg></div>
+                    <div>
+                        <h3>Mendukung Video & Audio</h3>
+                        <p>Unggah berbagai format file, mulai dari MP3, WAV, hingga video MP4. Kami akan mengekstrak audionya.</p>
+                    </div>
+                </li>
+                <li class="feature-item">
+                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div>
+                    <div>
+                        <h3>API untuk Developer</h3>
+                        <p>Integrasikan teknologi Sonus ke aplikasi Anda dengan API publik kami yang simpel dan mudah digunakan.</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </main>
+    
+    <footer class="site-footer">
+        <p>&copy; 2025 Sonus. Dibuat dengan 💙 di Indonesia.</p>
+    </footer>
+
+    <script>
+        // ... [JavaScript sama persis seperti sebelumnya dan sudah termasuk perbaikan bug] ...
+        const API_URL="https://lagu-neon.vercel.app/",views={initial:document.getElementById("initialView"),progress:document.getElementById("uploadProgressView"),search:document.getElementById("searchView"),result:document.getElementById("resultView"),error:document.getElementById("error")},uploadArea=document.getElementById("uploadArea"),audioFileInput=document.getElementById("audioFileInput"),audioPlayer=document.getElementById("audioPlayer"),searchAgainBtn=document.getElementById("searchAgainBtn"),uploadProgressBar=document.getElementById("uploadProgressBar"),uploadProgressText=document.getElementById("uploadProgressText"),uploadFileName=document.getElementById("uploadFileName");function switchView(e){Object.values(views).forEach(e=>e.classList.add("hidden")),views[e]&&views[e].classList.remove("hidden")}function handleFile(e){["audio/","video/mp4"].some(t=>e.type.startsWith(t))?submitRequest(e):alert("Harap pilih file audio atau MP4 yang valid.")}function submitRequest(e){uploadFileName.textContent=`Mengunggah: ${e.name}`,switchView("progress");const t=new FormData;t.append("file",e);const o=new XMLHttpRequest;o.open("POST",API_URL,!0),o.upload.onprogress=e=>{if(e.lengthComputable){const t=Math.round(e.loaded/e.total*100);uploadProgressBar.style.width=t+"%",uploadProgressText.textContent=t+"%"}},o.onload=()=>{if(o.status>=200&&o.status<300){switchView("search");try{const e=JSON.parse(o.responseText);e.success?displayResult(e):displayError(e.message)}catch(e){displayError("Respons dari server tidak valid.")}}else try{const e=JSON.parse(o.responseText);displayError(e.message||`Error: ${o.statusText}`)}catch(e){displayError(`Error: ${o.statusText}`)}},o.onerror=()=>displayError("Terjadi kesalahan jaringan."),o.send(t)}function displayResult(e){document.getElementById("title").textContent=e.title,document.getElementById("artist").textContent=e.artist,document.getElementById("albumCover").src=e.cover_art||"https://via.placeholder.com/280?text=No+Cover";const t=document.getElementById("audioPlayer"),o=document.getElementById("previewError");e.preview_url?(t.src=e.preview_url,t.classList.remove("hidden"),o.classList.add("hidden")):(t.classList.add("hidden"),o.classList.remove("hidden")),switchView("result")}function displayError(e){views.error.textContent=`Gagal: ${e}`,switchView("error"),audioFileInput.value="",setTimeout(()=>switchView("initial"),5e3)}uploadArea.addEventListener("click",()=>audioFileInput.click()),audioFileInput.addEventListener("change",()=>handleFile(audioFileInput.files[0])),["dragenter","dragover","dragleave","drop"].forEach(e=>{uploadArea.addEventListener(e,t=>{t.preventDefault(),t.stopPropagation()},!1)}),uploadArea.addEventListener("dragenter",()=>uploadArea.classList.add("drag-over")),uploadArea.addEventListener("dragleave",()=>uploadArea.classList.remove("drag-over")),uploadArea.addEventListener("drop",e=>{uploadArea.classList.remove("drag-over"),handleFile(e.dataTransfer.files[0])}),searchAgainBtn.addEventListener("click",()=>{audioPlayer.pause(),audioPlayer.src="",audioFileInput.value="",switchView("initial")});
+    </script>
+</body>
+</html>

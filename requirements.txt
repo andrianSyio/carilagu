@@ -3,3 +3,4 @@ requests
 pydub
 Flask-Cors
 ffmpeg-static
+yt-dlp

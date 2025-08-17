@@ -8,14 +8,13 @@ import time
 from pydub import AudioSegment
 from io import BytesIO
 import os
-import ffmpeg_static
 import yt_dlp # <-- Import library baru
 import uuid   # <-- Untuk membuat nama file unik
 
 app = Flask(__name__)
 CORS(app)
 
-AudioSegment.converter = ffmpeg_static.get_ffmpeg_path()
+
 
 access_key = os.environ.get('ACR_ACCESS_KEY')
 access_secret = os.environ.get('ACR_ACCESS_SECRET')

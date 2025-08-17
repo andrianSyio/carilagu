@@ -12,5 +12,5 @@
       "dest": "api/index.py"
     }
   ],
-  "installCommand": "pip install -r requirements.txt"
+  "installCommand": "bash build_files.sh && pip install -r requirements.txt"
 }
